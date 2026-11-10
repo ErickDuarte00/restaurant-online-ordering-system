@@ -28,9 +28,9 @@ COPY . .
 # Expose the Django port
 EXPOSE 8000
 
-# Run migrations
-# COPY docker-entrypoint.sh /docker-entrypoint.sh
-# RUN chmod a+x /docker-entrypoint.sh
-# ENTRYPOINT ["./docker-entrypoint.sh"]
+# Make entrypoint executable
+RUN chmod +x docker-entrypoint.sh
+
+ENTRYPOINT ["/app/docker-entrypoint.sh"]
 
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]

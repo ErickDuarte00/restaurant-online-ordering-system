@@ -1,73 +1,122 @@
-# Requirements
+# Restaurant Online Ordering System
 
-# Dependencies
+Sistema completo de pedidos para restaurante con Backend en Django REST Framework, Frontend en Angular 20 (PrimeNG + TailwindCSS) y base de datos PostgreSQL, todo orquestado con Docker Compose.
 
-- primeng
-- tailwind
+---
 
-# Usage
+## 🚀 Requisitos Previos
 
-## Snippets
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) (con Docker Compose v2)
+- [Node.js](https://nodejs.org/) v20+ (opcional si se ejecuta dentro de Docker)
+- [Python](https://www.python.org/) 3.13 (opcional si se ejecuta dentro de Docker)
 
-### Start development environment
+---
 
-docker compose --env-file ./backend/.env up --build --watch
+## ⚙️ Configuración Inicial (.env)
 
-This automatically syncs changes made in frontend project.
+Antes de levantar los contenedores, crea tu archivo `.env` a partir del ejemplo:
 
-### Start shell in backend-dev container
+```bash
+# En Windows PowerShell o CMD:
+copy .env.example .env
 
-docker compose --env-file ./backend/.env exec -it backend-dev sh
+# En Linux o macOS:
+cp .env.example .env
+```
 
-## Environment
+*(Opcional: puedes personalizar variables en `.env`, como credenciales de base de datos o claves de prueba de Stripe).*
 
-Create .env file in ./backend/ directory with the following variables
+---
 
-DJANGO_SECRET_KEY=your_secret_key
-DEBUG=True
-DJANGO_LOGLEVEL=info
-DJANGO_ALLOWED_HOSTS=localhost
-DATABASE_ENGINE=postgresql_psycopg2
-DATABASE_NAME=dockerdjango
-DATABASE_USERNAME=dbuser
-DATABASE_PASSWORD=dbpassword
-DATABASE_HOST=db
-DATABASE_PORT=5432
+## 🐳 Ejecución con Docker
 
-# Backend Project
+### 1. Entorno de Desarrollo (Recomendado)
 
-Hooked up with DRF, CORS and POSTGRES
+Levanta los contenedores con recarga en caliente (hot reload):
 
-## Running migrations
+```bash
+docker compose up --build
+```
 
-1. cd into backend
-   python manage.py makemigrations
-2. Rebuild the containers
-   docker compose --env-file ./backend/.env exec -it backend-dev sh
-3. Enter sh in backend-dev container
-   NOTE: Currently, I still have that error with entrypoint.sh file which would automate this on rebuild
-   python manage.py migrate
+O si utilizas Docker Compose Watch:
 
-# Frontend Project
+```bash
+docker compose up --build --watch
+```
 
-Is an Angular project which I aim to keep updated as long as I keep working with this same framework.
+- **Frontend (Angular)**: [http://localhost:4200](http://localhost:4200)
+- **Backend API (Django)**: [http://localhost:8000](http://localhost:8000)
+- **PostgreSQL**: `localhost:5432`
 
-Now, Angular project includes the following folders
+> Las migraciones de base de datos se ejecutan automáticamente al iniciar el backend mediante el entrypoint.
 
-## Project Directory Structure
+### 2. Entorno de Producción (Build)
 
-core: Main components which the app is build around
-shared: parent folder aims to store anything that is used in multiple places
-shared/components: Shared Components, i.e. It is for any component that is used in more that one place at a time
-shared/services:
-shared/types.ts
-shared/services/example.service.interface.ts
-pages: Those Screens that are accessed via routing, meaning any page must have a route.
+Para compilar y probar la versión optimizada de producción (Nginx para Angular + Gunicorn para Django):
 
-For any component that will be unique to certain component or page it must be allocated within the same folder
+```bash
+docker compose -f build.compose.yaml up --build
+```
 
-## Project Naming Conventions
+- **Frontend (Nginx)**: [http://localhost:8080](http://localhost:8080)
+- **Backend (Gunicorn)**: [http://localhost:8000](http://localhost:8000)
 
-Pages take the name without any appendix
+### 3. Detener los contenedores
 
-## Format Images with ffmpeg for menu
+```bash
+docker compose down
+```
+
+Para borrar también los volúmenes de datos:
+
+```bash
+docker compose down -v
+```
+
+---
+
+## 🛠️ Comandos Útiles
+
+### Entrar al contenedor del Backend:
+
+```bash
+docker compose exec backend-dev sh
+```
+
+### Crear un superusuario de Django (Admin):
+
+```bash
+docker compose exec backend-dev python manage.py createsuperuser
+```
+
+### Crear nuevas migraciones en Django:
+
+```bash
+docker compose exec backend-dev python manage.py makemigrations
+```
+
+---
+
+## 📁 Estructura del Proyecto
+
+```text
+├── backend/                  # Proyecto Django REST Framework
+│   ├── django_project/       # Configuración global (settings, urls, wsgi)
+│   ├── backoffice/           # App para gestión interna / empleados
+│   ├── delivery/             # App de envíos y logística
+│   ├── menu/                 # App de catálogo de menú
+│   ├── payments/             # Integración con Stripe
+│   └── docker-entrypoint.sh  # Script de inicio y migraciones
+├── frontend/                 # Proyecto Angular (PrimeNG + TailwindCSS)
+│   ├── src/app/pages/        # Vistas y páginas principales
+│   ├── src/app/core/         # Componentes centrales (Admin, Kitchen, etc.)
+│   └── nginx.conf            # Configuración para servir en producción
+├── docker/                   # Dockerfiles organizados por servicio
+│   ├── backend/              # dev.Dockerfile y build.Dockerfile
+│   ├── frontend/             # dev.Dockerfile y build.Dockerfile
+│   └── stripe/               # Script para Stripe CLI
+├── compose.yaml              # Docker compose para desarrollo
+├── build.compose.yaml        # Docker compose para producción
+├── .env.example              # Plantilla de variables de entorno
+└── .gitattributes            # Normalización de saltos de línea (LF para scripts)
+```

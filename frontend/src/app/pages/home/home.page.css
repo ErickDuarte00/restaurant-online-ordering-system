@@ -1,0 +1,44 @@
+/* SOLUCIÓN MÁS FUERTE:
+  Esto resetea CUALQUIER margen o relleno 
+  que el navegador o Bootstrap pongan por defecto.
+*/
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+/* Estilo del header, fondo blanco como en la foto */
+.site-header {
+    background-color: #ffffff;
+    border-bottom: 1px solid #e0e0e0; /* Una línea sutil debajo */
+    
+    /* EXTRA: Aseguramos que el header tampoco tenga margen */
+    margin-top: 0; 
+}
+
+.logo-sitio {
+  height: 60px;   /* típico tamaño de logo */
+  width: auto;    /* mantiene proporción */
+}
+
+
+/* Aquí aplicamos el tamaño EXACTO que pediste.
+  Apuntamos al 'id' que pusimos en el HTML.
+*/
+#logo-principal {
+    width: 215px;
+    height: 150px;
+    object-fit: contain; /* Esto evita que la imagen se estire o deforme */
+}
+
+/*
+  Estilo para los botones, para que se parezcan
+  a los botones grises de tu captura.
+*/
+.btn-light {
+    background-color: #f0f0f0;
+    border-color: #ddd;
+    color: #333;
+    font-weight: 500; /* Un poco de grosor en la fuente */
+}

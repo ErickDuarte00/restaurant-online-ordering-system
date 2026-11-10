@@ -15,20 +15,24 @@ services:
     restart: always
     image: postgres:17
     environment:
-      PGDATABASE: ${DATABASE_NAME}
-      PGUSER: ${DATABASE_USERNAME}
-      PGPASSWORD: ${DATABASE_PASSWORD}
-      POSTGRES_DB: ${DATABASE_NAME}
-      POSTGRES_USER: ${DATABASE_USERNAME}
-      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
-    env_file: "./backend/.env"
+      PGDATABASE: ${DATABASE_NAME:-restaurant_db}
+      PGUSER: ${DATABASE_USERNAME:-restaurant_user}
+      PGPASSWORD: ${DATABASE_PASSWORD:-restaurant_password}
+      POSTGRES_DB: ${DATABASE_NAME:-restaurant_db}
+      POSTGRES_USER: ${DATABASE_USERNAME:-restaurant_user}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD:-restaurant_password}
+    env_file:
+      - path: ./.env
+        required: false
+      - path: ./backend/.env
+        required: false
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
       test:
-        ["CMD-SHELL", "pg_isready -d $$DATABASE_NAME -U $$DATABASE_USERNAME"]
+        ["CMD-SHELL", "pg_isready -d $$POSTGRES_DB -U $$POSTGRES_USER"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -43,23 +47,25 @@ services:
       db:
         condition: service_healthy
     environment:
-      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
-      DEBUG: ${DEBUG}
-      DJANGO_LOGLEVEL: ${DJANGO_LOGLEVEL}
-      DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS}
-      DATABASE_ENGINE: ${DATABASE_ENGINE}
-      DATABASE_NAME: ${DATABASE_NAME}
-      DATABASE_USERNAME: ${DATABASE_USERNAME}
-      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
-      DATABASE_HOST: ${DATABASE_HOST}
-      DATABASE_PORT: ${DATABASE_PORT}
-      # Add Stripe environment variables
-      STRIPE_PUBLISHABLE_KEY: ${STRIPE_PUBLISHABLE_KEY}
-      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY}
-      STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET}
-    env_file: "./backend/.env"
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:-django-dev-secret-key-12345}
+      DEBUG: ${DEBUG:-True}
+      DJANGO_LOGLEVEL: ${DJANGO_LOGLEVEL:-info}
+      DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS:-*}
+      DATABASE_ENGINE: ${DATABASE_ENGINE:-postgresql}
+      DATABASE_NAME: ${DATABASE_NAME:-restaurant_db}
+      DATABASE_USERNAME: ${DATABASE_USERNAME:-restaurant_user}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD:-restaurant_password}
+      DATABASE_HOST: ${DATABASE_HOST:-db}
+      DATABASE_PORT: ${DATABASE_PORT:-5432}
+      STRIPE_PUBLISHABLE_KEY: ${STRIPE_PUBLISHABLE_KEY:-pk_test_...}
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-sk_test_...}
+      STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:-whsec_...}
+    env_file:
+      - path: ./.env
+        required: false
+      - path: ./backend/.env
+        required: false
 
-  # Add Stripe CLI service with login command
   stripe-cli:
     image: stripe/stripe-cli:latest
     container_name: stripe-cli
@@ -67,14 +73,15 @@ services:
     depends_on:
       - backend-dev
     environment:
-      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY}
-    env_file: "./backend/.env"
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-sk_test_...}
+    env_file:
+      - path: ./.env
+        required: false
+      - path: ./backend/.env
+        required: false
     volumes:
       - ./docker/stripe/run.sh:/run.sh:ro
-      # Persist Stripe CLI configuration
       - stripe_cli_config:/root/.config/stripe
-
-    # No ports needed - this container communicates internally
 
 volumes:
   postgres_data:

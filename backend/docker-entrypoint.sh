@@ -1,11 +1,9 @@
 #!/bin/sh
+set -e
 
-# Wait for the database to be ready
-# while ! nc -z db 5432; do
-# sleep 1
-# done
+# Run database migrations
+echo "Applying database migrations..."
+python manage.py migrate --noinput
 
-# Run migrations
-# python manage.py collectstatic --noinput
-# makemigrations is commited so it doesn't have to run here.
-python manage.py migrate --noinput || exit 1
+# Execute container command (e.g. gunicorn or runserver)
+exec "$@"
