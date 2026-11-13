@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { HomeComponent } from '@pages/home/home.component';
 import { MenuPage } from '@pages/menu/menu.page';
 import { CheckoutPage } from '@pages/checkout/checkout.page';
 import { OrderPage } from '@pages/order/order.page';
@@ -13,6 +14,11 @@ import { AdminKitchen } from '@core/admin-kitchen/admin-kitchen';
 export const routes: Routes = [
   {
     path: '',
+    component: HomeComponent,
+    title: 'Café Parralito | Inicio',
+  },
+  {
+    path: 'menu',
     component: MenuPage,
     title: 'Café Parralito | Menú',
   },
