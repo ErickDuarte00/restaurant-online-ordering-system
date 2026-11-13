@@ -50,7 +50,7 @@
  
   <nav class="container mx-auto px-4 flex justify-between items-center h-24">
     
-    <button @click="isOpen = !isOpen" 
+    <button (click)="isOpen = !isOpen" 
             class="text-gray-800 focus:outline-none" 
             aria-label="Toggle navigation">
       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -77,15 +77,8 @@
   </nav>
 
   <!-- FONT-AVERIA Y RUTAS AÑADIDAS -->
-  <div x-show="isOpen" 
-       @click.away="isOpen = false"
-       class="absolute top-full left-0 w-full bg-white shadow-lg z-10 p-4 font-averia"
-       x-transition:enter="transition ease-out duration-200"
-       x-transition:enter-start="opacity-0 transform -translate-y-2"
-       x-transition:enter-end="opacity-100 transform translate-y-0"
-       x-transition:leave="transition ease-in duration-150"
-       x-transition:leave-start="opacity-100 transform translate-y-0"
-       x-transition:leave-end="opacity-0 transform -translate-y-2">
+  <div *ngIf="isOpen" 
+       class="absolute top-full left-0 w-full bg-white shadow-lg z-10 p-4 font-averia">
     
     <h5 class="text-xl font-semibold mb-2">Contenido del Menú</h5>
     <ul class="flex flex-col space-y-1">

@@ -10,6 +10,9 @@ import { orderDetailResolver } from '@core/order/order-detail/order-detail-resol
 import { authGuard } from '@guards/auth-guard';
 import { AdminDashboardComponent } from '@core/admin-dashboard/admin-dashboard';
 import { AdminKitchen } from '@core/admin-kitchen/admin-kitchen';
+import { AboutComponent } from '@pages/about/about.component';
+import { ContactPage } from '@pages/contact/contact.page';
+import { UbicationPage } from '@pages/ubication/ubication.page';
 
 export const routes: Routes = [
   {
@@ -21,6 +24,21 @@ export const routes: Routes = [
     path: 'menu',
     component: MenuPage,
     title: 'Café Parralito | Menú',
+  },
+  {
+    path: 'about',
+    component: AboutComponent,
+    title: 'Café Parralito | Acerca de Nosotros',
+  },
+  {
+    path: 'contact',
+    component: ContactPage,
+    title: 'Café Parralito | Contacto',
+  },
+  {
+    path: 'ubication',
+    component: UbicationPage,
+    title: 'Café Parralito | Ubicación',
   },
   {
     path: 'checkout',
