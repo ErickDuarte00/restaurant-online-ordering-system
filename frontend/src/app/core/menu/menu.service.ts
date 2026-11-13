@@ -16,7 +16,7 @@ export class MenuService {
       return this.menuItemsCache$;
     }
 
-    const endpoint = `${environment.apiUrl}/menu`;
+    const endpoint = `${environment.apiUrl}/menu/`;
     this.menuItemsCache$ = this.http.get<MenuItem[]>(endpoint).pipe(
       shareReplay(1), // Cache the result and share it with multiple subscribers
     );

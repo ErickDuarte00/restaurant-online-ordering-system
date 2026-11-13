@@ -21,6 +21,11 @@ export const routes: Routes = [
     title: 'Café Parralito | Inicio',
   },
   {
+    path: 'home',
+    redirectTo: '',
+    pathMatch: 'full',
+  },
+  {
     path: 'menu',
     component: MenuPage,
     title: 'Café Parralito | Menú',

@@ -23,6 +23,16 @@
 
   --color-invalid: var(--p-iftalabel-invalid-color);
   --color-focus: var(--p-iftalabel-focus-color);
+
+  --color-brand-beige: #f8f0e7;
+  --color-banner-brown: #A37E58;
+  --color-light-tan: #d7ccc8;
+  --color-brand-brown: #5d4037;
+  --font-averia: 'Averia Serif Libre', serif;
+}
+
+.font-averia {
+  font-family: 'Averia Serif Libre', serif !important;
 }
 
 @layer base {
