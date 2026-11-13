@@ -29,10 +29,10 @@
          class="bg-gray-200 text-gray-800 px-4 py-2 rounded-md text-large font-semibold hover:bg-gray-300 font-averia">
         Mis Pedidos
       </a>
-      <a routerLink="/checkout"
-         class="bg-gray-200 text-gray-800 px-4 py-2 rounded-md text-large font-semibold hover:bg-gray-300 font-averia">
+      <button (click)="openCart()"
+         class="bg-gray-200 text-gray-800 px-4 py-2 rounded-md text-large font-semibold hover:bg-gray-300 font-averia cursor-pointer">
         Tu Carrito
-      </a>
+      </button>
     </div>
 
   </nav>
@@ -180,3 +180,5 @@
 
   </div>
 </footer>
+
+<app-shopping-cart></app-shopping-cart>
