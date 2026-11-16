@@ -13,5 +13,9 @@ python manage.py migrate --noinput
 echo "Checking and seeding initial menu data..."
 python manage.py seed_menu || true
 
+# Ensure default admin user exists
+echo "Ensuring default admin user exists..."
+python manage.py create_default_admin || true
+
 # Execute container command (e.g. gunicorn or runserver)
 exec "$@"
