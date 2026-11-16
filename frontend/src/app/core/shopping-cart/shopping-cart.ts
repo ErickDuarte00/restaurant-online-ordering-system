@@ -1,5 +1,5 @@
 import { Component, inject, ViewChild, input, viewChild } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ShoppingCartService } from './shopping-cart.service';
 import { CartItem } from './shopping-cart.interface';
@@ -19,7 +19,6 @@ import { CartItem as CartItemComponent } from '@core/shopping-cart/cart-item/car
     BadgeModule,
     DrawerModule,
     CartItemComponent,
-    RouterLink,
   ],
   templateUrl: './shopping-cart.html',
   styleUrl: './shopping-cart.css',
@@ -28,6 +27,7 @@ export class ShoppingCart {
   private drawerRef = viewChild<Drawer>('drawerRef');
 
   private shoppingCartService = inject(ShoppingCartService);
+  private router = inject(Router);
 
   cartVisible = false;
   cartTotal = 0;
@@ -67,6 +67,12 @@ export class ShoppingCart {
 
   showCart() {
     this.cartVisible = true;
+  }
+
+  proceedToCheckout(): void {
+    this.cartVisible = false;
+    this.shoppingCartService.hideCart();
+    this.router.navigate(['/checkout']);
   }
 
   ngOnDestroy() {

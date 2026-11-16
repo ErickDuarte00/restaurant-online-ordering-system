@@ -96,14 +96,12 @@
 
           <!-- Checkout Button -->
           <div class="p-4">
-            <a
+            <p-button
               label="Comprar"
               icon="pi pi-credit-card"
-              class="w-full"
-              routerLink="checkout"
-              pButton
-            >
-            </a>
+              styleClass="w-full cursor-pointer"
+              (onClick)="proceedToCheckout()"
+            />
           </div>
         </div>
       }
