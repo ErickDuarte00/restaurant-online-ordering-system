@@ -58,17 +58,20 @@ export class DeviceIdService {
 
   /**
    * Get device ID with validation
-   * Returns null if device ID is invalid or doesn't exist
+   * Automatically generates and stores a new device ID if none exists
    */
-  getValidDeviceId(): string | null {
-    const deviceId = this.getDeviceId();
-    return deviceId && this.isValidDeviceId(deviceId) ? deviceId : null;
+  getValidDeviceId(): string {
+    let deviceId = this.getDeviceId();
+    if (!deviceId || !this.isValidDeviceId(deviceId)) {
+      deviceId = this.generateDeviceId();
+    }
+    return deviceId;
   }
 
   /**
    * Initialize device ID - useful for app startup
    */
-  initializeDeviceId(): string | null {
+  initializeDeviceId(): string {
     return this.getValidDeviceId();
   }
 

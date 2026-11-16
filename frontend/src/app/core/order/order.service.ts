@@ -29,6 +29,7 @@ export class OrderService {
   getMyOrders$(pageUrl?: string): Observable<LoadingState<OrdersResponse>> {
     return of(null).pipe(
       switchMapWithLoading(() => {
+        this.deviceIdService.getValidDeviceId();
         const url = pageUrl || `${this.ORDERS_ENDPOINT}my-orders/`;
         return this.http.get<OrdersResponse>(url);
       }),

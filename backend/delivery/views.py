@@ -230,10 +230,13 @@ class OrderViewSet(viewsets.ModelViewSet):
         if not device_id:
             return Response(
                 {
-                    "success": False,
-                    "detail": "Device ID is required. Please include X-Device-ID header.",
+                    "success": True,
+                    "count": 0,
+                    "orders": [],
+                    "results": [],
+                    "detail": "No orders found for this device.",
                 },
-                status=status.HTTP_400_BAD_REQUEST,
+                status=status.HTTP_200_OK,
             )
 
         try:
@@ -248,22 +251,13 @@ class OrderViewSet(viewsets.ModelViewSet):
             if page is not None:
                 serializer = OrderListSerializer(page, many=True)
                 return self.get_paginated_response(serializer.data)
-                # return self.get_paginated_response(
-                #     {
-                #         "success": True,
-                #         "orders": serializer.data,
-                #         "customer": {
-                #             "device_id": str(customer.device_id),
-                #             "created_at": customer.created_at,
-                #         },
-                #     }
-                # )
 
             return Response(
                 {
                     "success": True,
                     "count": orders.count(),
                     "orders": serializer.data,
+                    "results": serializer.data,
                     "customer": {
                         "device_id": str(customer.device_id),
                         "created_at": customer.created_at,
@@ -277,8 +271,10 @@ class OrderViewSet(viewsets.ModelViewSet):
                     "success": True,
                     "count": 0,
                     "orders": [],
+                    "results": [],
                     "detail": "No orders found for this device.",
-                }
+                },
+                status=status.HTTP_200_OK,
             )
 
     # GET /delivery/orders/[id]/: Retrieve single order
