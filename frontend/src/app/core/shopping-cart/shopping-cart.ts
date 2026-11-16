@@ -35,8 +35,11 @@ export class ShoppingCart {
   cartItems: CartItem[] = [];
 
   private cartSubscription?: Subscription;
+  private displaySubscription?: Subscription;
 
   ngOnInit() {
+    this.cartVisible = false;
+
     // Subscribe to cart changes
     this.cartSubscription = this.shoppingCartService.cart$.subscribe((cart) => {
       this.cartTotal = cart.total;
@@ -44,12 +47,22 @@ export class ShoppingCart {
       this.cartItems = cart.items;
     });
 
-    this.shoppingCartService.cartDisplay$.subscribe((isDisplayed) => {
+    this.displaySubscription = this.shoppingCartService.cartDisplay$.subscribe((isDisplayed) => {
       this.cartVisible = isDisplayed;
     });
   }
-  closeCallback(e: any): void {
+
+  closeCallback(e?: any): void {
     this.drawerRef()?.close(e);
+    this.cartVisible = false;
+    this.shoppingCartService.hideCart();
+  }
+
+  onVisibleChange(visible: boolean): void {
+    this.cartVisible = visible;
+    if (!visible) {
+      this.shoppingCartService.hideCart();
+    }
   }
 
   showCart() {
@@ -57,8 +70,8 @@ export class ShoppingCart {
   }
 
   ngOnDestroy() {
-    if (this.cartSubscription) {
-      this.cartSubscription.unsubscribe();
-    }
+    this.cartSubscription?.unsubscribe();
+    this.displaySubscription?.unsubscribe();
+    this.shoppingCartService.hideCart();
   }
 }

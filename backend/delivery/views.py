@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.shortcuts import get_object_or_404
 from rest_framework import status, viewsets
@@ -265,7 +266,7 @@ class OrderViewSet(viewsets.ModelViewSet):
                 }
             )
 
-        except Customer.DoesNotExist:
+        except (Customer.DoesNotExist, ValidationError, ValueError):
             return Response(
                 {
                     "success": True,

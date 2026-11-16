@@ -21,6 +21,7 @@
 <!-- Tray -->
 <p-drawer
   [(visible)]="cartVisible"
+  (onHide)="closeCallback()"
   position="right"
   [style]="{ width: 'min(400px, 100vw)' }"
   #drawerRef

@@ -39,21 +39,30 @@ export class DeviceIdService {
   }
 
   /**
-   * Generate a new device ID (for testing or manual reset)
+   * Generate a new device ID (UUID v4 format compatible with Django UUIDField)
    */
   generateDeviceId(): string {
-    const newDeviceId =
-      'device_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    let newDeviceId: string;
+    if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+      newDeviceId = crypto.randomUUID();
+    } else {
+      newDeviceId = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+        const r = (Math.random() * 16) | 0;
+        const v = c === 'x' ? r : (r & 0x3) | 0x8;
+        return v.toString(16);
+      });
+    }
     this.setDeviceId(newDeviceId);
     return newDeviceId;
   }
 
   /**
-   * Validate device ID format
+   * Validate device ID format (must be valid UUID)
    */
   isValidDeviceId(deviceId: string): boolean {
-    // Basic validation - adjust based on your backend format
-    return typeof deviceId === 'string' && deviceId.length > 0;
+    const uuidRegex =
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    return typeof deviceId === 'string' && uuidRegex.test(deviceId);
   }
 
   /**

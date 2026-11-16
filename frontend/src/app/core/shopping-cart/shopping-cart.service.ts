@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject, Subject } from 'rxjs';
 import { LocalStorageService } from '@services/local-storage.service'; // Adjust path as needed
 import {
   CartItem,
@@ -24,7 +24,7 @@ export class ShoppingCartService {
   // 1. Create cart$ BehaviorSubject to emit cart state changes
   private cartSubject = new BehaviorSubject<ShoppingCart>(this.cartState);
   public cart$ = this.cartSubject.asObservable();
-  private cartDisplaySubject = new BehaviorSubject<boolean>(false);
+  private cartDisplaySubject = new Subject<boolean>();
   public cartDisplay$ = this.cartDisplaySubject.asObservable();
 
   // 2. Get shopping cart items

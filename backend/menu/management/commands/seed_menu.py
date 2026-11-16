@@ -8,22 +8,7 @@ from menu.models import MenuItem, Size
 class Command(BaseCommand):
     help = 'Populates the database with initial menu items from menu_items.csv'
 
-    def add_arguments(self, parser):
-        parser.add_argument(
-            '--force',
-            action='store_true',
-            help='Force re-seeding even if items exist',
-        )
-
     def handle(self, *args, **options):
-        force = options.get('force', False)
-        item_count = MenuItem.objects.count()
-        size_count = Size.objects.count()
-
-        if item_count >= 20 and size_count > 0 and not force:
-            self.stdout.write(self.style.SUCCESS(f'Menu items ({item_count}) and sizes ({size_count}) already exist in database.'))
-            return
-
         csv_path = Path(__file__).resolve().parent.parent.parent / 'menu_items.csv'
         if not csv_path.exists():
             self.stdout.write(self.style.ERROR(f'File not found: {csv_path}'))
@@ -82,6 +67,4 @@ class Command(BaseCommand):
 
                 created_count += 1
 
-        self.stdout.write(self.style.SUCCESS(f'Successfully seeded {created_count} menu items with sizes!'))
-
-
+        self.stdout.write(self.style.SUCCESS(f'Successfully seeded/updated {created_count} menu items with sizes!'))
